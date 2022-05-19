@@ -1,14 +1,22 @@
 <template>
-  <div class="name">{{ name }}</div>
-  <div>Hi</div>
+  <div class="name">
+    {{ greet }}
+  </div>
 </template>
 
 <script>
 export default {
   setup() {
     const name = "Juyoung";
+
+    const greeting = (name) => {
+      return "Hello, " + name;
+    };
+
+    const greet = greeting(name);
+
     return {
-      name
+      greet
     };
   }
 }
