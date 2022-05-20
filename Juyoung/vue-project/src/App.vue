@@ -1,26 +1,26 @@
 <template>
   <div class="container">
     <h2>To-Do List</h2>
-    <form 
-      @submit.prevent="onSubmit"
-      class="d-flex"
-    >
-      <div class="flex-grow-1 mr-2">
-        <input
-          class="form-control"
-          type="text" 
-          v-model="todo"
-          placeholder="Type new to-do"
-        >
+    <form @submit.prevent="onSubmit">
+      <div class="d-flex">
+        <div class="flex-grow-1 mr-2">
+          <input
+            class="form-control"
+            type="text" 
+            v-model="todo"
+            placeholder="Type new to-do"
+          >
+        </div>
+        <div>
+          <button 
+            class="btn btn-primary"
+            type="submit"
+          >
+            Add
+          </button>
+        </div>
       </div>
-      <div>
-        <button 
-          class="btn btn-primary"
-          type="submit"
-        >
-          Add
-        </button>
-      </div>
+      <div v-show="hasError" style="color: red">This field cannot be empty</div>
     </form>
     <div 
       v-for="todo in todos" :key="todo.id"
@@ -30,7 +30,6 @@
         {{ todo.subject }}
       </div>
     </div>
-
   </div>
 </template>
 
@@ -50,19 +49,25 @@ export default {
         subject: '장보기'
       },
     ]);
+    const hasError = ref(false);
 
     const onSubmit = () => {
-      console.log(todo.value);
-      todos.value.push({
-        id: Date.now(),
-        subject: todo.value,
-      });
+      if(todo.value === '') {
+        hasError.value = true;
+      } else {
+        todos.value.push({
+          id: Date.now(),
+          subject: todo.value,
+        });
+        hasError.value = false;
+      }
     }
 
     return {
       todo,
       onSubmit,
       todos,
+      hasError
     };
   }
 }
