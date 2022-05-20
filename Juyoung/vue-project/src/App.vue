@@ -11,12 +11,16 @@
 </template>
 
 <script>
+import { ref } from 'vue';
+
 export default {
   setup() {
-    let name = "Juyoung";
+    const name = ref({
+      id : 1
+    });
 
     const updateName = () => {
-      name = "yuwol";
+      name.value.id = 2;
       console.log(name);
     }
     // const greeting = (name) => {
