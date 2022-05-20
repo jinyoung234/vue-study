@@ -22,6 +22,9 @@
       </div>
       <div v-show="hasError" style="color: red">This field cannot be empty</div>
     </form>
+    <div v-if="!todos.length">
+      추가된 Todo가 없습니다.
+    </div>
     <div 
       v-for="todo in todos" :key="todo.id"
       class="card mt-2"
@@ -35,7 +38,7 @@
           >
           <label 
             class="form-check-label"
-            :class="{ todo: todo.completed}"
+            :class="{ todo: todo.completed }"
           >
             {{ todo.subject }}
           </label>
