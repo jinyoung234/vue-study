@@ -1,44 +1,64 @@
 <template>
-  <div class="name">
-    {{ name }}
+  <div class="container">
+    <h2>To-Do List</h2>
+    <TodoSimpleForm 
+      @add-todo="addTodo"
+    />
+    <div v-if="!todos.length">
+      추가된 Todo가 없습니다.
+    </div>
+    <TodoList 
+      :todos="todos" 
+      @toggle-todo="toggleTodo"
+      @delete-todo="deleteTodo"
+    />
   </div>
-  <button 
-    class="btn btn-primary"
-    v-on:click="updateName"
-  >
-    Click
-  </button>
 </template>
 
 <script>
 import { ref } from 'vue';
+import TodoSimpleForm from './components/TodoSimpleForm.vue';
+import TodoList from './components/TodoList.vue';
 
 export default {
+  components: {
+    TodoSimpleForm,
+    TodoList
+  },
   setup() {
-    const name = ref({
-      id : 1
-    });
-
-    const updateName = () => {
-      name.value.id = 2;
-      console.log(name);
+    const todos = ref([]);
+    const todoStyle = {
+      textDecoration: 'line-through',
+      color: 'gray'
     }
-    // const greeting = (name) => {
-    //   return "Hello, " + name;
-    // };
+    const addTodo = (todo) => {
+      todos.value.push(todo);
+    }
 
-    // const greet = greeting(name);
+    const deleteTodo = (index) => {
+      todos.value.splice(index, 1);
+    }
+
+    const toggleTodo = (index) => {
+      console.log(todos.value[index].completed);
+      todos.value[index].completed = !todos.value[index].completed;
+      console.log(todos.value[index].completed);
+    }
 
     return {
-      name,
-      updateName
+      addTodo,
+      todos,
+      todoStyle,
+      deleteTodo,
+      toggleTodo
     };
   }
 }
 </script>
 
 <style>
-  .name {
-    color: red;
+  .todo {
+    color: gray;
+    text-decoration: line-through;
   }
 </style>
