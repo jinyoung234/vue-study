@@ -68,8 +68,17 @@ export default {
       }
     }
 
-    const deleteTodo = (index) => {
-      todos.value.splice(index, 1);
+    const deleteTodo = async (index) => {
+      error.value = '';
+      // e데이터베이스에 투두를 삭제
+      const id = todos.value[index].id;
+      try {
+        await axios.delete('http://localhost:3000/todos/' + id);
+        todos.value.splice(index, 1);
+      } catch (err) {
+        console.log(err);
+        error.value = 'Something went wrong';
+      }
     }
 
     const toggleTodo = (index) => {
