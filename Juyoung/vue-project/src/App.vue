@@ -40,6 +40,19 @@ export default {
       textDecoration: 'line-through',
       color: 'gray'
     }
+
+    const getTodos = async () => {
+      try {
+        const res = await axios.get('http://localhost:3000/todos');
+        todos.value = res.data;
+      } catch (err) {
+        console.log(err);
+        error.value = 'Something went wrong';
+      }
+    }
+
+    getTodos();
+
     const addTodo = async (todo) => {
       // e데이터베이스에 투두를 저장
       error.value = '';
@@ -85,6 +98,7 @@ export default {
       searchText,
       filteredToods,
       error,
+      getTodos
     };
   }
 }
