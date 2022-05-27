@@ -1,4 +1,6 @@
 <template>
+<div>
+  <router-view/>
   <div class="container">
     <h2>To-Do List</h2>
     <input
@@ -40,6 +42,7 @@
       </ul>
     </nav>
   </div>
+</div>
 </template>
 
 <script>
