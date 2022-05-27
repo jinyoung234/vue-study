@@ -11,14 +11,15 @@
     <TodoSimpleForm @add-todo="addTodo"/>
     <div style="color: red">{{ error }}</div>
 
-    <div v-if="!filteredToods.length">
+    <div v-if="!todos.length">
       There is nothing to display
     </div>
     <TodoList 
-      :todos="filteredToods" 
+      :todos="todos" 
       @toggle-todo="toggleTodo"
       @delete-todo="deleteTodo"
     />
+    <hr />
     <nav aria-label="Page navigation example">
       <ul class="pagination">
         <li v-if="currentPage !== 1" class="page-item">
@@ -57,10 +58,7 @@ export default {
     const numberOfTodos = ref(0);
     const limit = 5;
     const currentPage = ref(1);
-
-    watch([currentPage, numberOfTodos], (currentPage, prev) => {
-      console.log(currentPage, prev)
-    });
+    const searchText = ref('');
 
     const numberOfPages = computed(() => {
       return Math.ceil(numberOfTodos.value/limit);
@@ -75,7 +73,7 @@ export default {
       currentPage.value = page;
       try {
         const res = await axios.get(
-          `http://localhost:3000/todos?_page=${page}&_limit=${limit}`
+          `http://localhost:3000/todos?subject_like=${searchText.value}&_page=${page}&_limit=${limit}`
         );
         numberOfTodos.value = res.headers['x-total-count'];
         todos.value = res.data;
@@ -128,16 +126,20 @@ export default {
       }
     }
 
-    const searchText = ref('');
-    const filteredToods = computed(() => {
-      if (searchText.value) {
-        return todos.value.filter(todo => {
-          return todo.subject.includes(searchText.value);
-        });
-      }
-      // empty string이면 모든 todo를 보여준다.
-      return todos.value;
-    })
+    
+
+    watch(searchText, () =>{
+      getTodos(1);
+    });
+    // const filteredToods = computed(() => {
+    //   if (searchText.value) {
+    //     return todos.value.filter(todo => {
+    //       return todo.subject.includes(searchText.value);
+    //     });
+    //   }
+    //   // empty string이면 모든 todo를 보여준다.
+    //   return todos.value;
+    // })
 
     return {
       addTodo,
@@ -146,7 +148,7 @@ export default {
       deleteTodo,
       toggleTodo,
       searchText,
-      filteredToods,
+      // filteredToods,
       error,
       getTodos,
       numberOfTodos,
