@@ -1,14 +1,15 @@
 <template>
   <div 
-    v-for="(todo, index) in todos" :key="todo.id"
+    v-for="(todo, index) in todos" 
+    :key="todo.id"
     class="card mt-2"
-  >
+    >
     <div class="card-body p-2 d-flex align-items-center">
       <div class="form-check flex-grow-1">
         <input 
           class="form-check-input" 
           type="checkbox"
-          :value="todo.completed"
+          :checked="todo.completed"
           @change="toggleTodo(index)"
         >
         <label 

@@ -81,10 +81,17 @@ export default {
       }
     }
 
-    const toggleTodo = (index) => {
-      console.log(todos.value[index].completed);
-      todos.value[index].completed = !todos.value[index].completed;
-      console.log(todos.value[index].completed);
+    const toggleTodo = async (index) => {
+      const id = todos.value[index].id;
+      try { 
+        await axios.patch('http://localhost:3000/todos/' + id, {
+          completed: !todos.value[index].completed
+        });
+        todos.value[index].completed = !todos.value[index].completed;
+      } catch (err) {
+        console.log(err);
+        error.value = 'Something went wrong';
+      }
     }
 
     const searchText = ref('');
