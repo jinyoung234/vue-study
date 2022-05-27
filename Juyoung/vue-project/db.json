@@ -6,19 +6,9 @@
       "id": 4
     },
     {
-      "subject": "ab",
-      "completed": false,
-      "id": 5
-    },
-    {
       "subject": "abc",
       "completed": false,
       "id": 6
-    },
-    {
-      "subject": "1",
-      "completed": false,
-      "id": 7
     },
     {
       "subject": "2",
@@ -94,6 +84,11 @@
       "subject": "234441",
       "completed": false,
       "id": 22
+    },
+    {
+      "subject": "아",
+      "completed": false,
+      "id": 23
     }
   ]
 }

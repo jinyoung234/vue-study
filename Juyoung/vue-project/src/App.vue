@@ -73,7 +73,7 @@ export default {
       currentPage.value = page;
       try {
         const res = await axios.get(
-          `http://localhost:3000/todos?subject_like=${searchText.value}&_page=${page}&_limit=${limit}`
+          `http://localhost:3000/todos?_sort=id&_order=desc&subject_like=${searchText.value}&_page=${page}&_limit=${limit}`
         );
         numberOfTodos.value = res.headers['x-total-count'];
         todos.value = res.data;
@@ -89,11 +89,11 @@ export default {
       // e데이터베이스에 투두를 저장
       error.value = '';
       try {
-        const res = await axios.post('http://localhost:3000/todos', {
+        await axios.post('http://localhost:3000/todos', {
           subject: todo.subject,
           completed: todo.completed,
         })
-        todos.value.push(res.data);
+        getTodos(1);
       } catch (err) {
         console.log(err);
         error.value = 'Something went wrong';
@@ -106,7 +106,7 @@ export default {
       const id = todos.value[index].id;
       try {
         await axios.delete('http://localhost:3000/todos/' + id);
-        todos.value.splice(index, 1);
+        getTodos(1);
       } catch (err) {
         console.log(err);
         error.value = 'Something went wrong';
