@@ -40,18 +40,19 @@ export default {
       textDecoration: 'line-through',
       color: 'gray'
     }
-    const addTodo = (todo) => {
+    const addTodo = async (todo) => {
       // e데이터베이스에 투두를 저장
       error.value = '';
-      axios.post('http://localhost:3000/todos', {
-        subject: todo.subject,
-        completed: todo.completed,
-      }).then(res => {
+      try {
+        const res = await axios.post('http://localhost:3000/todos', {
+          subject: todo.subject,
+          completed: todo.completed,
+        })
         todos.value.push(res.data);
-      }).catch(err => {
+      } catch (err) {
         console.log(err);
         error.value = 'Something went wrong';
-      });
+      }
     }
 
     const deleteTodo = (index) => {
