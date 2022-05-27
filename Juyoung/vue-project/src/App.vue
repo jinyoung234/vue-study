@@ -6,6 +6,7 @@
       type="text" 
       v-model="searchText"
       placeholder="Search"
+      @keyup.enter="searchTodo"
     >
     <hr />
     <TodoSimpleForm @add-todo="addTodo"/>
@@ -126,20 +127,18 @@ export default {
       }
     }
 
-    
+    let timeout= null;
+    const searchTodo = () => {
+      clearTimeout(timeout);
+      getTodos(1);
+    };
 
     watch(searchText, () =>{
-      getTodos(1);
+      clearTimeout(timeout);
+      timeout = setTimeout(() => { 
+        getTodos(1);
+      }, 2000)
     });
-    // const filteredToods = computed(() => {
-    //   if (searchText.value) {
-    //     return todos.value.filter(todo => {
-    //       return todo.subject.includes(searchText.value);
-    //     });
-    //   }
-    //   // empty string이면 모든 todo를 보여준다.
-    //   return todos.value;
-    // })
 
     return {
       addTodo,
@@ -148,12 +147,12 @@ export default {
       deleteTodo,
       toggleTodo,
       searchText,
-      // filteredToods,
       error,
       getTodos,
       numberOfTodos,
       numberOfPages,
       currentPage,
+      searchTodo
     };
   }
 }
