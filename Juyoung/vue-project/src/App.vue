@@ -2,11 +2,11 @@
 <div>
   <nav class="navbar navbar-expand-lg bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/">JUYOUNG</a>
+      <router-link class="navbar-brand" to="/">JUYOUNG</router-link>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#/todos">Todos</a>
+            <router-link class="nav-link active" aria-current="page" to="/todos">Todos</router-link>
           </li>
         </ul>
       </div>
