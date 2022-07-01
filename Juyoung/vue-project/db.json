@@ -82,7 +82,7 @@
     },
     {
       "subject": "new todo",
-      "completed": false,
+      "completed": true,
       "id": 22
     }
   ]
