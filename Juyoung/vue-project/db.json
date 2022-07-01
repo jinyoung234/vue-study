@@ -79,16 +79,6 @@
       "subject": "12345",
       "completed": false,
       "id": 21
-    },
-    {
-      "subject": "234441",
-      "completed": false,
-      "id": 22
-    },
-    {
-      "subject": "아",
-      "completed": false,
-      "id": 23
     }
   ]
 }
