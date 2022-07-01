@@ -32,6 +32,7 @@
   <Modal 
     v-if="showModal"
     @close="closeModal"
+    @delete="deleteTodo"
   />
 </template>
 
@@ -72,8 +73,10 @@ export default {
       todoDeleteId.value = null;
     }
 
-    const deleteTodo = (index) => {
-      emit('delete-todo', index);
+    const deleteTodo = () => {
+      emit('delete-todo', todoDeleteId.value);
+      showModal.value = false;
+      todoDeleteId.value = null;
     }
 
     const moveToPage = (todoId) => {

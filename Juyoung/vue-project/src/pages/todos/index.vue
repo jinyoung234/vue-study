@@ -115,10 +115,9 @@ export default {
       }
     }
 
-    const deleteTodo = async (index) => {
+    const deleteTodo = async (id) => {
       error.value = '';
       // e데이터베이스에 투두를 삭제
-      const id = todos.value[index].id;
       try {
         await axios.delete('http://localhost:3000/todos/' + id);
         getTodos(1);
