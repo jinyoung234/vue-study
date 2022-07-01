@@ -35,7 +35,6 @@
           </div>
         </div>
       </div>
-      
       <button 
         type="submit" 
         class="btn btn-primary"
@@ -50,6 +49,11 @@
         Cancel
       </button>
     </form>
+    <Toast
+      v-if="showToast" 
+      :message="toastMessage"
+      :type="toastAlertType"
+    />
   </div>
 </template>
 
@@ -58,8 +62,12 @@ import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { ref, computed } from 'vue';
 import _ from 'lodash';
+import Toast from '@/components/Toast.vue';
 
 export default {
+  components: {
+      Toast
+    },
   setup() {
     const route = useRoute();
     const router = useRouter();
@@ -67,14 +75,21 @@ export default {
     const originalTodo = ref(null);
     const loading = ref(true);
     const todoId = route.params.id;
-    
+    const showToast = ref(false);
+    const toastMessage = ref('');
+    const toastAlertType = ref('');
 
     const getTodo = async () => {
-      const res = await axios.get(`http://localhost:3000/todos/${todoId}`)
-      todo.value = { ...res.data };
-      originalTodo.value = { ...res.data };
+      try{
+        const res = await axios.get(`http://localhost:3000/todos/${todoId}`)
+        todo.value = { ...res.data };
+        originalTodo.value = { ...res.data };
 
-      loading.value = false;
+        loading.value = false;
+      } catch (error) {
+        console.log(error);
+        tiggerToast('Something went wrong!', 'danger')
+      }
     };
 
     const todoUpdated = computed(() => {
@@ -93,22 +108,43 @@ export default {
 
     getTodo();
 
-    const onSave = async () => {
-      const res = await axios.put(`http://localhost:3000/todos/${todoId}`, {
-        subject: todo.value.subject,
-        completed: todo.value.completed
-      })
+    const tiggerToast = (message, type = 'success') => {
+      toastMessage.value = message;
+      toastAlertType.value = type;
+      showToast.value = true;
+      setTimeout(() => {
+        toastMessage.value = '';
+        toastAlertType.value = '';
+        showToast.value = false;
+      }, 3000)
+    }
 
-      originalTodo.value = {...res.data};
+    const onSave = async () => {
+      try{
+        const res = await axios.put(`http://localhost:3000/todos/${todoId}`, {
+          subject: todo.value.subject,
+          completed: todo.value.completed
+        })
+
+        originalTodo.value = {...res.data};
+        tiggerToast('successfully saved!');
+      } catch (error) {
+        console.log(error);
+        tiggerToast('Something went wrong!', 'danger');
+      }
     }
 
     return {
       todo,
       loading,
       toggleTodoStatus,
-      moveToTodoListPage,
+      moveToTodoListPage, 
       onSave,
       todoUpdated,
+      showToast,
+      tiggerToast,
+      toastMessage,
+      toastAlertType
     };
   }
 }
