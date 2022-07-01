@@ -24,16 +24,26 @@
       <div>
         <button 
           class="btn btn-danger btn-sm"
-          @click.stop="deleteTodo(index)"
+          @click.stop="openModal(todo.id)"
         >Delete</button>
       </div>
     </div>
   </div>
+  <Modal 
+    v-if="showModal"
+    @close="closeModal"
+  />
 </template>
 
 <script>
 import { useRouter } from 'vue-router';
+import Modal from '@/components/Modal.vue';
+import { ref } from 'vue';
+
 export default {
+  components: {
+    Modal
+  },
   props: {
     todos: {
       type: Array,
@@ -46,8 +56,20 @@ export default {
   ],
   setup(props, { emit }) {
     const router = useRouter();
+    const showModal = ref(false);
+    const todoDeleteId = ref(null);
     const toggleTodo = (index, event) => {
       emit('toggle-todo', index, event.target.checked);
+    }
+
+    const openModal = (id) => {
+      showModal.value = true;
+      todoDeleteId.value = id;
+    }
+
+    const closeModal = () => {
+      showModal.value = false;
+      todoDeleteId.value = null;
     }
 
     const deleteTodo = (index) => {
@@ -68,7 +90,10 @@ export default {
     return {
       toggleTodo,
       deleteTodo,
-      moveToPage
+      moveToPage,
+      showModal,
+      openModal,
+      closeModal
     }
   }
 }
