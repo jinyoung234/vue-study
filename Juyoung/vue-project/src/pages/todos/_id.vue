@@ -60,9 +60,10 @@
 <script>
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
-import { ref, computed, onUnmounted } from 'vue';
+import { ref, computed } from 'vue';
 import _ from 'lodash';
 import Toast from '@/components/Toast.vue';
+import { useToast } from '@/composables/toast';
 
 export default {
   components: {
@@ -75,14 +76,13 @@ export default {
     const originalTodo = ref(null);
     const loading = ref(true);
     const todoId = route.params.id;
-    const showToast = ref(false);
-    const toastMessage = ref('');
-    const toastAlertType = ref('');
-    const timeout = ref(null)
+    const {
+      toastMessage,
+      toastAlertType,
+      showToast,
+      triggerToast
+    } = useToast();
 
-    onUnmounted(() =>  {
-      clearTimeout(timeout.value);
-    });
     const getTodo = async () => {
       try{
         const res = await axios.get(`http://localhost:3000/todos/${todoId}`)
@@ -92,7 +92,7 @@ export default {
         loading.value = false;
       } catch (error) {
         console.log(error);
-        tiggerToast('Something went wrong!', 'danger')
+        triggerToast('Something went wrong!', 'danger');
       }
     };
 
@@ -112,18 +112,6 @@ export default {
 
     getTodo();
 
-    const tiggerToast = (message, type = 'success') => {
-      toastMessage.value = message;
-      toastAlertType.value = type;
-      showToast.value = true;
-      timeout.value = setTimeout(() => {
-        toastMessage.value = '';
-        toastAlertType.value = '';
-        showToast.value = false;
-        console.log("hello");
-      }, 3000)
-    }
-
     const onSave = async () => {
       try{
         const res = await axios.put(`http://localhost:3000/todos/${todoId}`, {
@@ -132,10 +120,10 @@ export default {
         })
 
         originalTodo.value = {...res.data};
-        tiggerToast('successfully saved!');
+        triggerToast('successfully saved!');
       } catch (error) {
         console.log(error);
-        tiggerToast('Something went wrong!', 'danger');
+        triggerToast('Something went wrong!', 'danger');
       }
     }
 
@@ -146,11 +134,10 @@ export default {
       moveToTodoListPage, 
       onSave,
       todoUpdated,
-      showToast,
-      tiggerToast,
       toastMessage,
       toastAlertType,
-      timeout
+      showToast,
+      triggerToast,
     };
   }
 }
